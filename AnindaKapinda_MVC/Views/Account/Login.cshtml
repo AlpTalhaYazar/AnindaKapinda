@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+@model IdentityUser
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            
+            <h1 class="mb-3">Login</h1>
+
+            <form method="post">
+                <div class="mb-3">
+
+                    <label class="form-label" asp-for="Email">Email Address</label>
+                    <input type="email" asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Password">Password</label>
+                    <input type="password" asp-for="Password" class="form-control">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                @*<div class="mb-3">
+            <input type="checkbox" asp-for="RememberMe" class="form-check-input" />
+            <label class="form-check-label" asp-for="RememberMe">Remember Me</label>
+        </div>*@
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                @Html.HiddenFor(m => m.Id)
+            </form>
+
+        </div>
+    </div>
+</div>
