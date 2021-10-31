@@ -1,0 +1,63 @@
+﻿@model AnindaKapinda_MVC.Models.ViewModels.NewEmployeeViewModel
+
+@{
+    ViewData["Title"] = "AddEmployee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3">Add Employee</h1>
+
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Employee.FirstName">First Name</label>
+                    <input type="text" asp-for="Employee.FirstName" class="form-control" />
+                    <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Employee.LastName">Last Name</label>
+                    <input type="text" asp-for="Employee.LastName" class="form-control" />
+                    <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Employee.BirthDate">Birth Date</label>
+                    <input type="date" asp-for="Employee.BirthDate" class="form-control" />
+                    <span asp-validation-for="Employee.BirthDate" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Employee.PhoneNumber">Phone Number</label>
+                    <input type="tel" asp-for="Employee.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Employee.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Employee.Email">Email Address</label>
+                    <input type="email" asp-for="Employee.Email" class="form-control" />
+                    <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Employee.Password">Password</label>
+                    <input type="password" asp-for="Employee.Password" class="form-control" />
+                    <span asp-validation-for="Employee.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RoleID">Role</label>
+                    @*<input type="password" asp-for="RoleID" class="form-control" />*@
+                    <select asp-for="RoleID" class="form-control">                        
+                        @foreach (var item in ViewBag.roles)
+                        {
+                            <option value="@(item.Id)">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RoleID" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

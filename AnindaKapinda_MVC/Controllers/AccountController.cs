@@ -1,4 +1,5 @@
 ﻿using AnindaKapinda_MVC.Models;
+using AnindaKapinda_MVC.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,25 +16,39 @@ namespace AnindaKapinda_MVC.Controllers
         
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
         
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
+            this._roleManager = roleManager;
             this._context = new ApplicationDbContext();
+        }
+        
+        public async Task<IActionResult> IndexAsync()
+        {
+            IdentityRole identityRole = new IdentityRole
+            {
+                Name = "CLient"
+            };
+
+            IdentityResult result = await _roleManager.CreateAsync(identityRole);
+
+            return View();
         }
         [HttpGet]
         public IActionResult Login()
-        {
+        {            
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(IdentityUser identityUser, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             if(ModelState.IsValid)
             {
-                var identityResult = await _signInManager.PasswordSignInAsync(identityUser.Email, identityUser.PasswordHash, false,false);
+                var identityResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,false);
 
                 if (identityResult.Succeeded)
                 {
@@ -43,24 +58,34 @@ namespace AnindaKapinda_MVC.Controllers
                     }
                     else
                     {
-                        return RedirectToAction(returnUrl);
+                        return Redirect(returnUrl);
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid Login Attempt.");
                 }
             }
 
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
             return View();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Login(string)
-
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string handler)
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
+            if (handler == "Logout")
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Login");
+            }
+            return RedirectToAction("Index", "Home");
         }
-        
+
         [HttpGet]
         public IActionResult Register()
         {

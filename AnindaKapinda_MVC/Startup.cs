@@ -1,3 +1,4 @@
+using AnindaKapinda_MVC.CustomValidator;
 using AnindaKapinda_MVC.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AnindaKapinda_MVC
 {
@@ -27,10 +30,16 @@ namespace AnindaKapinda_MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddHttpContextAccessor();
+            services.AddControllersWithViews().AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddRazorPages();
             services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AuthConnectionString")));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AuthDbContext>();
+            services.Configure<IdentityOptions>(Configuration.GetSection(nameof(IdentityOptions)));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

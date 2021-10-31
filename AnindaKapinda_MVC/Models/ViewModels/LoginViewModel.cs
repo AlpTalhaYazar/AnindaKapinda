@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AnindaKapinda_MVC.Models
+namespace AnindaKapinda_MVC.Models.ViewModels
 {
-    public class User
+    public class LoginViewModel
     {
-        public int UserID { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-
-        public UserRole UserRole { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

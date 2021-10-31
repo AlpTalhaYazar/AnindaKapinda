@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Models
 {
-    
     public class Client
     {
         public int ClientID { get; set; }
@@ -16,6 +15,7 @@ namespace AnindaKapinda_MVC.Models
         public bool EmailConfirmation { get; set; }
         public string Password { get; set; }
         public string PasswordConfirmation { get; set; }
+        public bool Status { get; set; }
 
         public ICollection<Address> Addresses { get; set; }
         public ICollection<CreditCard> CreditCards { get; set; }

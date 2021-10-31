@@ -15,8 +15,6 @@ namespace AnindaKapinda_MVC.Models
         public DbSet<CreditCard> CreditCards { get; set; }
         public DbSet<Employee> Employees { get; set; }        
         public DbSet<Product> Products { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,7 +26,6 @@ namespace AnindaKapinda_MVC.Models
             modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ClientEntityConfiguration());            
             modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new UserRoleEntityConfiguration());
         }
     }
 }

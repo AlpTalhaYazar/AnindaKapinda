@@ -85,6 +85,9 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("ClientID");
 
                     b.ToTable("Clients");
@@ -147,12 +150,10 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserRoleRoleID")
-                        .HasColumnType("int");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("EmployeeID");
-
-                    b.HasIndex("UserRoleRoleID");
 
                     b.ToTable("Employees");
                 });
@@ -196,44 +197,6 @@ namespace AnindaKapinda_MVC.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.User", b =>
-                {
-                    b.Property<int>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserRoleRoleID")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserID");
-
-                    b.HasIndex("UserRoleRoleID");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.UserRole", b =>
-                {
-                    b.Property<int>("RoleID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RoleID");
-
-                    b.ToTable("UserRoles");
-                });
-
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Address", b =>
                 {
                     b.HasOne("AnindaKapinda_MVC.Models.Client", "Client")
@@ -252,15 +215,6 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.Employee", b =>
-                {
-                    b.HasOne("AnindaKapinda_MVC.Models.UserRole", "UserRole")
-                        .WithMany()
-                        .HasForeignKey("UserRoleRoleID");
-
-                    b.Navigation("UserRole");
-                });
-
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Product", b =>
                 {
                     b.HasOne("AnindaKapinda_MVC.Models.Category", "Category")
@@ -268,15 +222,6 @@ namespace AnindaKapinda_MVC.Migrations
                         .HasForeignKey("CategoryID");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.User", b =>
-                {
-                    b.HasOne("AnindaKapinda_MVC.Models.UserRole", "UserRole")
-                        .WithMany("Users")
-                        .HasForeignKey("UserRoleRoleID");
-
-                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Category", b =>
@@ -289,11 +234,6 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("CreditCards");
-                });
-
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.UserRole", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
