@@ -46,7 +46,7 @@
                 <div class="mb-3">
                     <label class="form-label" asp-for="RoleID">Role</label>
                     @*<input type="password" asp-for="RoleID" class="form-control" />*@
-                    <select asp-for="RoleID" class="form-control">                        
+                    <select asp-for="RoleID" class="form-control">
                         @foreach (var item in ViewBag.roles)
                         {
                             <option value="@(item.Id)">@item</option>

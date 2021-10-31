@@ -1,6 +1,7 @@
 ﻿using AnindaKapinda_MVC.Models;
 using AnindaKapinda_MVC.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Controllers
 {
-    
+
     public class AccountController : Controller
     {
-        
+
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
-        
+
         public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this._userManager = userManager;
@@ -26,8 +27,8 @@ namespace AnindaKapinda_MVC.Controllers
             this._roleManager = roleManager;
             this._context = new ApplicationDbContext();
         }
-        
-        public async Task<IActionResult> IndexAsync()
+
+        public IActionResult Index()
         {
             //IdentityRole identityRole = new IdentityRole
             //{
@@ -40,15 +41,22 @@ namespace AnindaKapinda_MVC.Controllers
         }
         [HttpGet]
         public IActionResult Login()
-        {            
+        {
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> LoginAsync(LoginViewModel model, string returnUrl = null)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,false);
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null && !user.EmailConfirmed && (await _userManager.CheckPasswordAsync(user, model.Password)))
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet.");             // Checking if user confirmed email 
+                    return View(model);                                                             // and blocking if not confirmed
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                 {
@@ -92,6 +100,7 @@ namespace AnindaKapinda_MVC.Controllers
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync(Client client)
         {
             if (ModelState.IsValid)
@@ -107,13 +116,20 @@ namespace AnindaKapinda_MVC.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);      //Automatic login after registration
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                                            new { userId = user.Id, token = token }, Request.Scheme);
+
+                    //await _signInManager.SignInAsync(user, false);      //Automatic login after registration
 
                     client.ClientID = user.Id;          // Set the incoming model's ID to same ID as User at Identity table
                     _context.Clients.Add(client);       // Adding incoming model to our client table with desired ID
                     _context.SaveChanges();             //
 
-                    return RedirectToAction("List", "Category");
+                    ViewBag.ErrorTitle = "Registration successful";
+                    ViewBag.ErrorMessage = "Before you can Login, please confirm your email, by clicking on the confirmation link we have emailed you";
+                    return View("EmailConfirmError");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -122,5 +138,31 @@ namespace AnindaKapinda_MVC.Controllers
             }
             return View();
         }
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("index", "home");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"The User ID {userId} is invalid";
+                return View("NotFound");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View("EmailConfirmSuccess");
+            }
+
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return View("EmailConfirmError");
+        }
+
+
     }
 }

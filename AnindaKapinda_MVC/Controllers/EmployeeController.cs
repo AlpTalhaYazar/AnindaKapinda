@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace AnindaKapinda_MVC.Controllers
 
         public IActionResult PendingOrders()
         {
-            var model = _appContext.Orders.ToList();
+            var model = _appContext.Orders.Where(x => x.OrderStatus == Enumerations.OrderStatus.Status0).ToList();
             return View(model);
         }
         
@@ -28,7 +29,7 @@ namespace AnindaKapinda_MVC.Controllers
         public IActionResult PrepareOrder(int id)
         {
             var model = _appContext.Orders.Where(x => x.OrderID == id).FirstOrDefault();
-            model.isPrepared = true;
+            model.OrderStatus = Enumerations.OrderStatus.Status1;
             _appContext.SaveChanges();
             return View("PendingOrders");
         }
@@ -36,15 +37,17 @@ namespace AnindaKapinda_MVC.Controllers
         
         public IActionResult PendingShipments()
         {
-            return View();
+            var model = _appContext.Orders.Where(x => x.OrderStatus == Enumerations.OrderStatus.Status1).ToList();
+            return View(model);
         }
-        
-        public IActionResult DeliverSuccess()
+        [HttpPost]
+        public IActionResult Deliver(int id)
         {
+            //_appContext.Orders.Where()
             return View();
         }
-        
-        public IActionResult DeliverFail()
+        [HttpPost]
+        public IActionResult Deliver(int id, string handler)
         {
             return View();
         }

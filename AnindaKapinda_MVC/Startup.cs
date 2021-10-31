@@ -36,7 +36,8 @@ namespace AnindaKapinda_MVC
             services.AddRazorPages();
             services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AuthConnectionString")));
             services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<AuthDbContext>();
+                    .AddEntityFrameworkStores<AuthDbContext>()
+                    .AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(Configuration.GetSection(nameof(IdentityOptions)));
 
 

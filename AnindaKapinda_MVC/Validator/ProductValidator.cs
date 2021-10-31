@@ -10,8 +10,6 @@ namespace AnindaKapinda_MVC.Validator
 {
     public class ProductValidator : AbstractValidator<Product>
     {
-        private readonly IEnumerable<Product> _products;
-
         public ProductValidator()
         {
             RuleFor(x => x.Name).NotEmpty()
