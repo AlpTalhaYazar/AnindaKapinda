@@ -15,6 +15,8 @@ namespace AnindaKapinda_MVC.Models
         public DbSet<CreditCard> CreditCards { get; set; }
         public DbSet<Employee> Employees { get; set; }        
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

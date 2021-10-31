@@ -11,7 +11,7 @@ namespace AnindaKapinda_MVC.Models
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
-
+            
         }
     }
 }

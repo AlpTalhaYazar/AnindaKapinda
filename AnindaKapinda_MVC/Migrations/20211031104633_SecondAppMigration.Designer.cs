@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnindaKapinda_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211030124653_FirstAppMigration")]
-    partial class FirstAppMigration
+    [Migration("20211031104633_SecondAppMigration")]
+    partial class SecondAppMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,8 +31,8 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Detail")
                         .HasColumnType("nvarchar(max)");
@@ -57,9 +57,6 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
                     b.HasKey("CategoryID");
 
                     b.ToTable("Categories");
@@ -67,29 +64,26 @@ namespace AnindaKapinda_MVC.Migrations
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Client", b =>
                 {
-                    b.Property<int>("ClientID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmation")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("ClientID");
 
@@ -112,8 +106,8 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("CardNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ExpirationDate")
                         .HasColumnType("nvarchar(max)");
@@ -130,10 +124,8 @@ namespace AnindaKapinda_MVC.Migrations
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Employee", b =>
                 {
-                    b.Property<int>("EmployeeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("EmployeeID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -152,6 +144,9 @@ namespace AnindaKapinda_MVC.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("EmployeeID");
 
@@ -182,9 +177,6 @@ namespace AnindaKapinda_MVC.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
 
                     b.HasKey("ProductID");
 

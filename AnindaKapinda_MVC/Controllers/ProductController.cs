@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AnindaKapinda_MVC.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,22 @@ namespace AnindaKapinda_MVC.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _appContext;
+
+        public ProductController()
         {
-            return View();
+            _appContext = new ApplicationDbContext();
+        }
+
+        public IActionResult List()
+        {
+            var model = _appContext.Products.ToList();
+            return View(model);
+        }
+        public IActionResult List(int id)
+        {
+            var model = _appContext.Products.Where(x => x.Category.CategoryID == id).ToList();
+            return View(model);
         }
 
         //public JsonResult IsProductExists(string ProductName)

@@ -13,7 +13,6 @@ namespace AnindaKapinda_MVC.Models
         public int DiscountRate { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
-        public bool Status { get; set; }
 
         public decimal DiscountedPrice 
         {

@@ -29,12 +29,12 @@ namespace AnindaKapinda_MVC.Controllers
         
         public async Task<IActionResult> IndexAsync()
         {
-            IdentityRole identityRole = new IdentityRole
-            {
-                Name = "CLient"
-            };
+            //IdentityRole identityRole = new IdentityRole
+            //{
+            //    Name = "CLient"
+            //};
 
-            IdentityResult result = await _roleManager.CreateAsync(identityRole);
+            //IdentityResult result = await _roleManager.CreateAsync(identityRole);
 
             return View();
         }
@@ -44,13 +44,13 @@ namespace AnindaKapinda_MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> LoginAsync(LoginViewModel model, string returnUrl = null)
         {
             if(ModelState.IsValid)
             {
-                var identityResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,false);
 
-                if (identityResult.Succeeded)
+                if (result.Succeeded)
                 {
                     if (returnUrl == null || returnUrl == "/")
                     {
@@ -76,11 +76,11 @@ namespace AnindaKapinda_MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Logout(string handler)
+        public async Task<IActionResult> LogoutAsync(string handler)
         {
             if (handler == "Logout")
             {
-                await _signInManager.SignOutAsync();
+                await _signInManager.SignOutAsync();        // Logout method
                 return RedirectToAction("Login");
             }
             return RedirectToAction("Index", "Home");
@@ -92,7 +92,7 @@ namespace AnindaKapinda_MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(Client client)
+        public async Task<IActionResult> RegisterAsync(Client client)
         {
             if (ModelState.IsValid)
             {
@@ -102,16 +102,18 @@ namespace AnindaKapinda_MVC.Controllers
                     Email = client.Email
                 };
 
-                var result = await _userManager.CreateAsync(user, client.Password);
+                var result = await _userManager.CreateAsync(user, client.Password); // Create User in Identity table
+                var result2 = await _userManager.AddToRoleAsync(user, "Client");
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
+                    await _signInManager.SignInAsync(user, false);      //Automatic login after registration
 
-                    _context.Clients.Add(client);
-                    _context.SaveChanges();
+                    client.ClientID = user.Id;          // Set the incoming model's ID to same ID as User at Identity table
+                    _context.Clients.Add(client);       // Adding incoming model to our client table with desired ID
+                    _context.SaveChanges();             //
 
-                    return RedirectToAction();
+                    return RedirectToAction("List", "Category");
                 }
                 foreach (var error in result.Errors)
                 {

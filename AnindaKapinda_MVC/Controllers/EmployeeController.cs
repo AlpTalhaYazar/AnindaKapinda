@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AnindaKapinda_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,29 +10,40 @@ namespace AnindaKapinda_MVC.Controllers
 {
     public class EmployeeController : Controller
     {
-        [Authorize("Supply Center Worker")]
-        public IActionResult PendingOrders()
+        private readonly ApplicationDbContext _appContext;
+
+        public EmployeeController()
         {
-            return View();
-        }
-        [Authorize("Supply Center Worker")]
-        [HttpPost]
-        public IActionResult PrepareOrder()
-        {
-            return View();
+            _appContext = new ApplicationDbContext();
         }
 
-        [Authorize("Courier")]
+
+        public IActionResult PendingOrders()
+        {
+            var model = _appContext.Orders.ToList();
+            return View(model);
+        }
+        
+        [HttpPost]
+        public IActionResult PrepareOrder(int id)
+        {
+            var model = _appContext.Orders.Where(x => x.OrderID == id).FirstOrDefault();
+            model.isPrepared = true;
+            _appContext.SaveChanges();
+            return View("PendingOrders");
+        }
+////////////////////////////////////////////////////////////
+        
         public IActionResult PendingShipments()
         {
             return View();
         }
-        [Authorize("Courier")]
+        
         public IActionResult DeliverSuccess()
         {
             return View();
         }
-        [Authorize("Courier")]
+        
         public IActionResult DeliverFail()
         {
             return View();

@@ -11,6 +11,7 @@ namespace AnindaKapinda_MVC.Models.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {
+            builder.Property(x => x.ClientID).ValueGeneratedNever();
             builder.Ignore(x => x.PasswordConfirmation);
         }
     }

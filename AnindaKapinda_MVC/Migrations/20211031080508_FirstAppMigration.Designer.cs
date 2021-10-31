@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnindaKapinda_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211030213735_SecondAppMigration")]
-    partial class SecondAppMigration
+    [Migration("20211031080508_FirstAppMigration")]
+    partial class FirstAppMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,8 +31,8 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Detail")
                         .HasColumnType("nvarchar(max)");
@@ -67,10 +67,8 @@ namespace AnindaKapinda_MVC.Migrations
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Client", b =>
                 {
-                    b.Property<int>("ClientID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -111,8 +109,8 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Property<string>("CardNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ExpirationDate")
                         .HasColumnType("nvarchar(max)");
@@ -129,10 +127,8 @@ namespace AnindaKapinda_MVC.Migrations
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Employee", b =>
                 {
-                    b.Property<int>("EmployeeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("EmployeeID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");

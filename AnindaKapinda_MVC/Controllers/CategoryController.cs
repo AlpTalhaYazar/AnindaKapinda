@@ -13,15 +13,16 @@ namespace AnindaKapinda_MVC.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _appContext;
         public CategoryController()
         {
-            this._context = new ApplicationDbContext();
+            this._appContext = new ApplicationDbContext();
         }
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Index()
-        {            
-            return View();
+        
+        public IActionResult List()
+        {
+            var model = _appContext.Categories.ToList();
+            return View(model);
         }
     }
 }
