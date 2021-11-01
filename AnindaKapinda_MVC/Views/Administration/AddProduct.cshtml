@@ -1,0 +1,61 @@
+﻿@model AnindaKapinda_MVC.Models.Product
+
+@{
+    ViewData["Title"] = "AddProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3">Add new product</h1>
+            <hr />
+
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-label mb-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-label mb-3">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-label mb-3">
+                    <label asp-for="DiscountRate" class="control-label"></label>
+                    <input asp-for="DiscountRate" class="form-control" />
+                    <span asp-validation-for="DiscountRate" class="text-danger"></span>
+                </div>
+                <div class="form-label mb-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-label mb-3">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" class="form-control" accept="Image/*" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Category"></label>
+                    <select asp-for="CategoryID" asp-items="@(new SelectList(@ViewBag.Categories, "CategoryID", "Name"))" class="form-control">
+                            <option>Please Select One</option>
+                    </select>
+                    <span asp-validation-for="Category.CategoryID" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+
+            <div>
+                <a asp-action="List" asp-controller="Product">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+

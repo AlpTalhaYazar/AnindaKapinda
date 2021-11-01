@@ -7,8 +7,7 @@ namespace AnindaKapinda_MVC.Models
 {
     public class Cart
     {
-        public int BasketID { get; set; }
-        public ICollection<CartProducts> CartProducts { get; set; }
+        public int CartID { get; set; }
         public decimal Total 
         {
             get 
@@ -16,6 +15,9 @@ namespace AnindaKapinda_MVC.Models
                 return CartProducts.Select(x => x.Price * x.Amount).Sum();
             }
         }
+
+        public string ClientID { get; set; }
         public Client Client { get; set; }
+        public ICollection<CartProduct> CartProducts { get; set; }
     }
 }

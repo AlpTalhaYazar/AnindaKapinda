@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnindaKapinda_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211031104633_SecondAppMigration")]
-    partial class SecondAppMigration
+    [Migration("20211101073926_FirstAppMigration")]
+    partial class FirstAppMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,51 @@ namespace AnindaKapinda_MVC.Migrations
                     b.HasIndex("ClientID");
 
                     b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.Cart", b =>
+                {
+                    b.Property<int>("CartID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClientID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CartID");
+
+                    b.HasIndex("ClientID")
+                        .IsUnique()
+                        .HasFilter("[ClientID] IS NOT NULL");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.CartProduct", b =>
+                {
+                    b.Property<int>("CartProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Product")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CartProductID");
+
+                    b.HasIndex("CartID");
+
+                    b.ToTable("CartProduct");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Category", b =>
@@ -153,6 +198,32 @@ namespace AnindaKapinda_MVC.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.Order", b =>
+                {
+                    b.Property<int>("OrderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DeliveryStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Products")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderID");
+
+                    b.HasIndex("EmployeeID");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Product", b =>
                 {
                     b.Property<int>("ProductID")
@@ -160,7 +231,7 @@ namespace AnindaKapinda_MVC.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryID")
+                    b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -198,6 +269,26 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.Cart", b =>
+                {
+                    b.HasOne("AnindaKapinda_MVC.Models.Client", "Client")
+                        .WithOne("Cart")
+                        .HasForeignKey("AnindaKapinda_MVC.Models.Cart", "ClientID");
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.CartProduct", b =>
+                {
+                    b.HasOne("AnindaKapinda_MVC.Models.Cart", "Cart")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("CartID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("AnindaKapinda_MVC.Models.CreditCard", b =>
                 {
                     b.HasOne("AnindaKapinda_MVC.Models.Client", "Client")
@@ -207,13 +298,29 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.Order", b =>
+                {
+                    b.HasOne("AnindaKapinda_MVC.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeID");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Product", b =>
                 {
                     b.HasOne("AnindaKapinda_MVC.Models.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryID");
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.Cart", b =>
+                {
+                    b.Navigation("CartProducts");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Category", b =>
@@ -224,6 +331,8 @@ namespace AnindaKapinda_MVC.Migrations
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Client", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("Cart");
 
                     b.Navigation("CreditCards");
                 });

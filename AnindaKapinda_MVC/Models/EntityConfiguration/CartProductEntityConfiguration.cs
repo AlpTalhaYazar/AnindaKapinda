@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Models.EntityConfiguration
 {
-    public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
+    public class CartProductEntityConfiguration : IEntityTypeConfiguration<CartProduct>
     {
-        public void Configure(EntityTypeBuilder<Cart> builder)
+        public void Configure(EntityTypeBuilder<CartProduct> builder)
         {
-            builder.Ignore(x => x.Total);
-            builder.HasMany(x => x.CartProducts).WithOne(x => x.Cart);
+            builder.HasOne(x => x.Cart).WithMany(x => x.CartProducts);
         }
     }
 }

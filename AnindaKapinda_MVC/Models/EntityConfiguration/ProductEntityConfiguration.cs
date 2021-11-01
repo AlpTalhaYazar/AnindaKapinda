@@ -12,7 +12,9 @@ namespace AnindaKapinda_MVC.Models.EntityConfiguration
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.Ignore(x => x.DiscountedPrice);
+            builder.Ignore(x => x.ImageFile);
             builder.HasIndex(x => x.Name).IsUnique();
+            builder.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryID);
         }
     }
 }

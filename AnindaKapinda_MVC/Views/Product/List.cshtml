@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AnindaKapinda_MVC.Models.Product>
+﻿
+@model IEnumerable<Product>
 
 @{
     ViewData["Title"] = "List";
@@ -8,9 +9,9 @@
 <h1>List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="AddProduct" asp-controller="Administration">Create New</a>
 </p>
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -35,32 +36,45 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiscountedPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountedPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <img src="@("~/image/" + item.Image)" asp-append-version="true" width="150px" height="150px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                @{
+                    if (User.IsInRole("Administrator"))
+                    {
+                        <td>
+                            <a asp-action="EditProduct" asp-controller="Administration" asp-route-name="@item.Name">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Name">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Name">Delete</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a asp-action="AddtoCart" asp-controller="Client" asp-route-name="@item">Add to Cart</a>
+                        </td>
+                    }
+                }
+
+            </tr>
+        }
     </tbody>
 </table>

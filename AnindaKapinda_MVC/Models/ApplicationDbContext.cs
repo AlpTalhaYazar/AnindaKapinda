@@ -1,4 +1,5 @@
 ﻿using AnindaKapinda_MVC.Models.EntityConfiguration;
+using AnindaKapinda_MVC.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace AnindaKapinda_MVC.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new CartEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CartProductEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ClientEntityConfiguration());            
             modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());

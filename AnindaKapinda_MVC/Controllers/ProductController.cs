@@ -1,5 +1,7 @@
 ﻿using AnindaKapinda_MVC.Models;
+using AnindaKapinda_MVC.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +15,24 @@ namespace AnindaKapinda_MVC.Controllers
 
         public ProductController()
         {
-            _appContext = new ApplicationDbContext();
+            this._appContext = new ApplicationDbContext();
         }
-
+        [HttpGet]
         public IActionResult List()
         {
-            var model = _appContext.Products.ToList();
-            return View(model);
+            var model1 = _appContext.Products.Include(x=>x.Category);
+            //var model2 = new ProductListViewModel
+            //                {
+            //                    Name = model1.Select(x => x.Name).FirstOrDefault(),
+            //                    Price = model1.Select(x => x.Price).FirstOrDefault(),
+            //                    DiscountedPrice = model1.Select(x => x.DiscountedPrice).FirstOrDefault(),
+            //                    Description = model1.Select(x => x.Description).FirstOrDefault(),
+            //                    Image = model1.Select(x => x.Image).FirstOrDefault(),
+            //                    Category = model1.Select(x => x.Category.Name).FirstOrDefault(),
+            //                };
+            return View(model1);
         }
-        public IActionResult List(int id)
+        public IActionResult ListbyCategory(int id)
         {
             var model = _appContext.Products.Where(x => x.Category.CategoryID == id).ToList();
             return View(model);

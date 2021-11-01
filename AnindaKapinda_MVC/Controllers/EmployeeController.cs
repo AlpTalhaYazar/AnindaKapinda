@@ -15,7 +15,7 @@ namespace AnindaKapinda_MVC.Controllers
 
         public EmployeeController()
         {
-            _appContext = new ApplicationDbContext();
+            this._appContext = new ApplicationDbContext();
         }
 
 

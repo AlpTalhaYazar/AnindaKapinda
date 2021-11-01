@@ -156,7 +156,7 @@ namespace AnindaKapinda_MVC.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                return View("EmailConfirmSuccess");
+                return View();
             }
 
             ViewBag.ErrorTitle = "Email cannot be confirmed";

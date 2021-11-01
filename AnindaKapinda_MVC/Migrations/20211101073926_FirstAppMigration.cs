@@ -13,8 +13,7 @@ namespace AnindaKapinda_MVC.Migrations
                 {
                     CategoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,8 +66,7 @@ namespace AnindaKapinda_MVC.Migrations
                     DiscountRate = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    CategoryID = table.Column<int>(type: "int", nullable: true)
+                    CategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,7 +76,7 @@ namespace AnindaKapinda_MVC.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Categories",
                         principalColumn: "CategoryID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,6 +95,25 @@ namespace AnindaKapinda_MVC.Migrations
                     table.PrimaryKey("PK_Addresses", x => x.AddressID);
                     table.ForeignKey(
                         name: "FK_Addresses_Clients_ClientID",
+                        column: x => x.ClientID,
+                        principalTable: "Clients",
+                        principalColumn: "ClientID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    CartID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.CartID);
+                    table.ForeignKey(
+                        name: "FK_Carts_Clients_ClientID",
                         column: x => x.ClientID,
                         principalTable: "Clients",
                         principalColumn: "ClientID",
@@ -127,15 +144,76 @@ namespace AnindaKapinda_MVC.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Products = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
+                    DeliveryStatus = table.Column<int>(type: "int", nullable: false),
+                    EmployeeID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderID);
+                    table.ForeignKey(
+                        name: "FK_Orders_Employees_EmployeeID",
+                        column: x => x.EmployeeID,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartProduct",
+                columns: table => new
+                {
+                    CartProductID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Product = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    CartID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartProduct", x => x.CartProductID);
+                    table.ForeignKey(
+                        name: "FK_CartProduct_Carts_CartID",
+                        column: x => x.CartID,
+                        principalTable: "Carts",
+                        principalColumn: "CartID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_ClientID",
                 table: "Addresses",
                 column: "ClientID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartProduct_CartID",
+                table: "CartProduct",
+                column: "CartID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_ClientID",
+                table: "Carts",
+                column: "ClientID",
+                unique: true,
+                filter: "[ClientID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CreditCards_ClientID",
                 table: "CreditCards",
                 column: "ClientID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_EmployeeID",
+                table: "Orders",
+                column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryID",
@@ -156,19 +234,28 @@ namespace AnindaKapinda_MVC.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
+                name: "CartProduct");
+
+            migrationBuilder.DropTable(
                 name: "CreditCards");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
         }
     }
 }

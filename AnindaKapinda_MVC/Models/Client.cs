@@ -17,6 +17,7 @@ namespace AnindaKapinda_MVC.Models
         public string PasswordConfirmation { get; set; }
         public bool Status { get; set; }
 
+        public Cart Cart { get; set; }
         public ICollection<Address> Addresses { get; set; }
         public ICollection<CreditCard> CreditCards { get; set; }
 

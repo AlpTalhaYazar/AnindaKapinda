@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace AnindaKapinda_MVC.Models
         public int DiscountRate { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
+        public IFormFile ImageFile { get; set; }
 
         public decimal DiscountedPrice 
         {
@@ -22,6 +24,7 @@ namespace AnindaKapinda_MVC.Models
             }
         }
 
+        public int CategoryID { get; set; }
         public Category Category { get; set; }
     }
 }

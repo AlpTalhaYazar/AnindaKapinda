@@ -11,7 +11,7 @@ namespace AnindaKapinda_MVC.Models.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            
+            builder.HasMany(x => x.Products).WithOne(x => x.Category);
         }
     }
 }

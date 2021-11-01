@@ -1,10 +1,13 @@
 ﻿using AnindaKapinda_MVC.Models;
 using AnindaKapinda_MVC.Models.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -18,14 +21,16 @@ namespace AnindaKapinda_MVC.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _appContext;
         private readonly AuthDbContext _authContext;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AdministrationController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, AuthDbContext authDbContext)
+        public AdministrationController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, AuthDbContext authDbContext, IWebHostEnvironment hostEnvironment)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._roleManager = roleManager;
             this._appContext = new ApplicationDbContext();
             this._authContext = authDbContext;
+            this._hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
@@ -134,28 +139,58 @@ namespace AnindaKapinda_MVC.Controllers
         [HttpGet]
         public IActionResult AddProduct()
         {
+            ViewBag.Categories = _appContext.Categories.ToList();
             return View();
         }
         [HttpPost]
-        public IActionResult AddProduct(Product product)
+        public async Task<IActionResult> AddProductAsync(Product product)
         {
-            _appContext.Products.Add(product);
-            _appContext.SaveChanges();
-            return View("List", "Product");
+            if (ModelState.IsValid)
+            {
+                string ImageFileName;
+                if (product.ImageFile == null)
+                    product.Image = "preparing.png";
+                else
+                {
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(product.ImageFile.FileName);
+                    string extension = Path.GetExtension(product.ImageFile.FileName);
+                    product.Image = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(wwwRootPath + "/Image/", fileName);
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await product.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+
+
+                _appContext.Products.Add(product);
+                _appContext.SaveChanges();
+            }
+            return RedirectToAction("List", "Product");
         }
         [HttpGet]
-        public IActionResult EditProduct(int id)
+        public IActionResult EditProduct(string name)
         {
-            var model = _appContext.Products.Find(id);
+            var model = _appContext.Products.Where(x => x.Name == name).FirstOrDefault();
+            ViewBag.Categories = _appContext.Categories.ToList();
             return View(model);
         }
         [HttpPost]
         public IActionResult EditProduct(Product product)
         {
             var model = _appContext.Products.Find(product.ProductID);
-            model = product;
+
+            model.Name = product.Name;
+            model.Price = product.Price;
+            model.DiscountRate = product.DiscountRate;
+            model.Description = product.Description;
+            model.Image = product.Image;
+            model.CategoryID = product.CategoryID;
+
             _appContext.SaveChanges();
-            return View("List", "Product");
+            return RedirectToAction("List", "Product");
         }
     }
 }
