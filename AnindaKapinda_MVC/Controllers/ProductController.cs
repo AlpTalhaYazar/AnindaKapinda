@@ -32,6 +32,21 @@ namespace AnindaKapinda_MVC.Controllers
             //                };
             return View(model1);
         }
+        [HttpGet]
+        public IActionResult List2()
+        {
+            var model1 = _appContext.Products.Include(x=>x.Category);
+            //var model2 = new ProductListViewModel
+            //                {
+            //                    Name = model1.Select(x => x.Name).FirstOrDefault(),
+            //                    Price = model1.Select(x => x.Price).FirstOrDefault(),
+            //                    DiscountedPrice = model1.Select(x => x.DiscountedPrice).FirstOrDefault(),
+            //                    Description = model1.Select(x => x.Description).FirstOrDefault(),
+            //                    Image = model1.Select(x => x.Image).FirstOrDefault(),
+            //                    Category = model1.Select(x => x.Category.Name).FirstOrDefault(),
+            //                };
+            return View(model1);
+        }
         public IActionResult ListbyCategory(int id)
         {
             var model = _appContext.Products.Where(x => x.Category.CategoryID == id).ToList();
