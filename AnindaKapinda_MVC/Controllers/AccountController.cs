@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+using MailKit.Net.Smtp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,6 +123,8 @@ namespace AnindaKapinda_MVC.Controllers
                     var confirmationLink = Url.Action("ConfirmEmail", "Account",
                                             new { userId = user.Id, token = token }, Request.Scheme);
 
+                    SendConfirmationMail(user.Email, confirmationLink);
+
                     //await _signInManager.SignInAsync(user, false);      //Automatic login after registration
 
                     client.ClientID = user.Id;          // Set the incoming model's ID to same ID as User at Identity table
@@ -138,6 +142,40 @@ namespace AnindaKapinda_MVC.Controllers
             }
             return View();
         }
+
+        public IActionResult SendConfirmationMail(string confirmationEmail, string confirmationLink)
+        {
+
+            MimeMessage message = new MimeMessage();
+
+            MailboxAddress from = new MailboxAddress("AnindaKapindaSystem",
+            "techcareershare@gmail.com");
+            message.From.Add(from);
+
+            MailboxAddress to = new MailboxAddress("New Member",
+            confirmationEmail);
+            message.To.Add(to);
+
+            message.Subject = "Resgistration confirmation";
+
+            BodyBuilder bodyBuilder = new BodyBuilder();
+            bodyBuilder.TextBody = confirmationLink;
+
+            message.Body = bodyBuilder.ToMessageBody();
+
+            //////////
+
+            SmtpClient client = new SmtpClient();
+            client.Connect("smtp.gmail.com", 465, true);
+            client.Authenticate("techcareershare@gmail.com", "-Tech20+21Career-");
+
+            client.Send(message);
+            client.Disconnect(true);
+            client.Dispose();
+
+            return View();
+        }
+
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
