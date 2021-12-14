@@ -14,6 +14,7 @@ namespace AnindaKapinda_MVC.Models
         public string CardHolder { get; set; }
         public string SecurityCode { get; set; }
 
+        public string ClientID { get; set; }
         public Client Client { get; set; }
     }
 }

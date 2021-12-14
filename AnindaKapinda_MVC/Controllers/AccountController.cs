@@ -30,23 +30,28 @@ namespace AnindaKapinda_MVC.Controllers
             this._context = new ApplicationDbContext();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
             //IdentityRole identityRole = new IdentityRole
             //{
-            //    Name = "CLient"
+            //    Name = "Confirmed CLient"
             //};
 
             //IdentityResult result = await _roleManager.CreateAsync(identityRole);
 
+            var user = _userManager.FindByNameAsync(User.Identity.Name);
+
+            await _userManager.AddToRoleAsync(await user, "ConfirmedClient");
             return View();
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginAsync(LoginViewModel model, string returnUrl = null)
         {
             if (ModelState.IsValid)
@@ -58,7 +63,11 @@ namespace AnindaKapinda_MVC.Controllers
                     return View(model);                                                             // and blocking if not confirmed
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                // var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                // creates hash error so changed to below
+
+                var signedUser = _userManager.FindByEmailAsync(model.Email);
+                var result = await _signInManager.PasswordSignInAsync(await signedUser, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                 {
@@ -97,6 +106,7 @@ namespace AnindaKapinda_MVC.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -142,7 +152,7 @@ namespace AnindaKapinda_MVC.Controllers
             }
             return View();
         }
-
+        [AllowAnonymous]
         public IActionResult SendConfirmationMail(string confirmationEmail, string confirmationLink)
         {
 

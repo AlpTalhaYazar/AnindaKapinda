@@ -22,8 +22,4 @@
     <PackageReference Include="MimeKit" Version="2.15.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Employee\" />
-  </ItemGroup>
-
 </Project>

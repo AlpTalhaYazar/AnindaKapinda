@@ -18,7 +18,7 @@ namespace AnindaKapinda_MVC.Controllers
         {
             this._appContext = new ApplicationDbContext();
         }
-        
+        [Authorize]
         public IActionResult List()
         {
             var model = _appContext.Categories.ToList();

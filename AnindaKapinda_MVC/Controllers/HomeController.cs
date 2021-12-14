@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,16 +22,15 @@ namespace AnindaKapinda_MVC.Controllers
             this._logger = logger;
             this._context = new ApplicationDbContext();
         }
-        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        public IActionResult unauthorizedaccess()
         {
             return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

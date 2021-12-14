@@ -1,0 +1,39 @@
+﻿@model IEnumerable<AnindaKapinda_MVC.Models.Product>
+
+@{
+    ViewData["Title"] = "List2";
+}
+
+<h1>List2</h1>
+
+<p>
+    <a asp-action="AddProduct" asp-controller="Administration">Create New</a>
+</p>
+
+<div class="d-flex flex-wrap justify-content-center align-items-center">
+    @foreach (var item in Model)
+    {
+        <div class="card p-2 border-secondary" style="width:200px; margin:10px">
+            <img class="card-img-top justify-content-center" src="@("~/image/" + item.Image)" asp-append-version="true" style="width:150px; height:150px" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+                <p class="card-text">@item.Description</p>
+            </div>
+            <ul class="list-group list-group-flush" style="text-align:center">
+                <li class="list-group-item" style="text-decoration: line-through">@item.Price ₺</li>
+                <li class="list-group-item">@item.DiscountedPrice ₺</li>
+            </ul>
+            <div class="card-body" style="text-align:center">
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <a asp-action="EditProduct" asp-controller="Administration" asp-route-name="@item.Name" class="btn btn-warning">Edit</a>
+                }
+                else
+                {
+                    <a asp-action="AddtoCart" asp-controller="Client" asp-route-id="@item.ProductID" class="btn btn-primary">Add to Cart</a>
+                }
+            </div>
+        </div>
+    }
+</div>

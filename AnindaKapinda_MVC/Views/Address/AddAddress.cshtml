@@ -1,0 +1,71 @@
+﻿@model AnindaKapinda_MVC.Models.Address
+
+@{
+    ViewData["Title"] = "AddAddress";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#City').on('change', function () {
+                $('#District option').remove();
+                var cityId = $('#City option:selected').val();
+                if (cityId > 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("DistrictList", "Address")/' + cityId,
+                        success: function (result) {
+                            var s = '<option value="-1">Select District</option>';
+                            for (var i = 0; i < result.length; i++) {
+                                s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                            }
+                            $('#District').html(s);
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3">New Address</h1>
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="City">City</label>
+                    <select asp-for="City" id="City" class="form-control">
+                        <option>
+                            Select City
+                        </option>
+                        @foreach (var city in ViewBag.Cities)
+                        {
+                            <option value="@city.CityID">@city.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="District">District</label>
+                    <select asp-for="District" id="District" class="form-control"></select>
+                    <span asp-validation-for="District" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Detail">Detail</label>
+                    <input type="text" asp-for="Detail" class="form-control" />
+                    <span asp-validation-for="Detail" class="text-danger"></span>
+                </div>
+                @Html.HiddenFor(x=>x.ClientID)
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using AnindaKapinda_MVC.Models;
 using AnindaKapinda_MVC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class AdministrationController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -147,7 +149,6 @@ namespace AnindaKapinda_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                string ImageFileName;
                 if (product.ImageFile == null)
                     product.Image = "preparing.png";
                 else

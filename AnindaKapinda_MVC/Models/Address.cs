@@ -12,6 +12,7 @@ namespace AnindaKapinda_MVC.Models
         public string District { get; set; }
         public string Detail { get; set; }
 
+        public string ClientID { get; set; }
         public Client Client { get; set; }
     }
 }

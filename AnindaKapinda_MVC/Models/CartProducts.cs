@@ -10,7 +10,6 @@ namespace AnindaKapinda_MVC.Models
         public int CartProductID { get; set; }
         public string Product { get; set; }
         public decimal Price { get; set; }
-        public int Amount { get; set; }
 
         public int CartID { get; set; }
         public Cart Cart { get; set; }

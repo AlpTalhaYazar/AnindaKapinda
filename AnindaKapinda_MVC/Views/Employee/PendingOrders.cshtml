@@ -1,0 +1,107 @@
+﻿@model IEnumerable<AnindaKapinda_MVC.Models.Order>
+
+@using AnindaKapinda_MVC.Models
+
+@{
+    ViewData["Title"] = "PendingOrders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>PendingOrders</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@*<div class="row">
+    <div class="column">
+        <table>
+            <tr>
+                <th>Products</th>
+            </tr>
+            @foreach (var item in )
+            {
+                <tr>
+                    <td>Jill</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="column">
+        <table>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Points</th>
+            </tr>
+            <tr>
+                <td>Jill</td>
+                <td>Smith</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Eve</td>
+                <td>Jackson</td>
+                <td>94</td>
+            </tr>
+            <tr>
+                <td>Adam</td>
+                <td>Johnson</td>
+                <td>67</td>
+            </tr>
+        </table>
+    </div>
+</div>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderProducts)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderProducts)
+                </td>
+                <td>
+                    <input name="deneme1" value="" type="text" class="form-control" placeholder="@((item.OrderStatus).GetDescription())" readonly>
+                </td>
+                <td>
+                    <input name="deneme2" value="" type="text" class="form-control" placeholder="@((item.DeliveryStatus).GetDescription())" readonly>
+                </td>
+                <td>
+                    <a asp-action="PrepareOrder" asp-route-id="@item.OrderID">Prepare Order</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderProducts)
+                </td>
+                <td>
+                    <input name="deneme1" value="" type="text" class="form-control" placeholder="@((item.OrderStatus).GetDescription())" readonly>
+                </td>
+                <td>
+                    <input name="deneme2" value="" type="text" class="form-control" placeholder="@((item.DeliveryStatus).GetDescription())" readonly>
+                </td>
+                <td>
+                    <a asp-action="PrepareOrder" asp-route-id="@item.OrderID">Prepare Order</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,61 @@
+﻿@model AnindaKapinda_MVC.Models.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "Order";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+
+            <h1>Order</h1>
+
+            <form method="post">
+
+                <div class="mb-3 form-control">
+                    @foreach (var address in Model.Addresses)
+                    {
+                        <input class="form-check-input" type="radio" name="AddressID" value="@address.AddressID" id="flexRadioDefault1" />
+                        <label class="form-check-label" asp-for="@address" for="AddressID">
+                            @Html.DisplayFor(modelItem => address.City)
+
+                            @Html.DisplayFor(modelItem => address.District)
+
+                            @Html.DisplayFor(modelItem => address.Detail)"
+                        </label>
+                        <br />
+                    }
+                </div>
+                <div class="mb-3 form-control">
+                    @foreach (var creditCard in Model.CreditCards)
+                    {
+                        <input class="form-check-input" type="radio" name="CCID" value="@creditCard.CreditCardID" id="flexRadioDefault2" />
+                        <label class="form-check-label" asp-for="@creditCard" for="CCID">
+                            @Html.DisplayFor(modelItem => creditCard.CardName)
+                            @Html.DisplayFor(modelItem => creditCard.CardNumber)
+                            @Html.DisplayFor(modelItem => creditCard.ExpirationDate)
+                            @Html.DisplayFor(modelItem => creditCard.CardHolder)
+                            @Html.DisplayFor(modelItem => creditCard.SecurityCode)
+                        </label>
+                        <br />
+                    }
+                </div>
+                <div class="row">
+                    @for (int i = 0; i < Model.Products.Count(); i++)
+                    {
+                        <input name="product@(i)" value="@Model.Products.ToList()[i]" type="text" class="form-control col-sm" placeholder="@Model.Products.ToList()[i]" readonly>
+                        <input name="price@(i)" value="@Model.Prices.ToList()[i]" type="text" class="form-control col-sm" placeholder="@Model.Prices.ToList()[i]" readonly>
+                        <input name="amount@(i)" value="@Model.Amounts.ToList()[i]" type="text" class="form-control col-sm" placeholder="@Model.Amounts.ToList()[i]" readonly>
+                        <hr />
+                    }
+                </div>
+                <div class="mb-3">
+                    <input asp-for="Total" class="form-control" type="text" placeholder="@Model.Total" readonly>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Pay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

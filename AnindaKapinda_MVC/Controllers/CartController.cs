@@ -1,5 +1,7 @@
 ﻿using AnindaKapinda_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +16,11 @@ namespace AnindaKapinda_MVC.Controllers
         {
             this._appContext = new ApplicationDbContext();
         }
-        public IActionResult List(Client client)
+
+        [Authorize(Roles = "ConfirmedClient")]
+        public IActionResult List()
         {
-            var model = _appContext.Carts.Where(x => x.Client == client).ToList();
+            var model = _appContext.Carts.Include(x => x.CartProducts).ToList();
             return View(model);
         }
     }

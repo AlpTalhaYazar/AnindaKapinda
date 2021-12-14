@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnindaKapinda_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211101092710_SecondAppMigration")]
-    partial class SecondAppMigration
+    [Migration("20211102150447_SixthAppMigration")]
+    partial class SixthAppMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,9 +73,6 @@ namespace AnindaKapinda_MVC.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
                     b.Property<int>("CartID")
                         .HasColumnType("int");
 
@@ -89,7 +86,7 @@ namespace AnindaKapinda_MVC.Migrations
 
                     b.HasIndex("CartID");
 
-                    b.ToTable("CartProduct");
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Category", b =>
@@ -105,6 +102,21 @@ namespace AnindaKapinda_MVC.Migrations
                     b.HasKey("CategoryID");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.City", b =>
+                {
+                    b.Property<int>("CityID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CityID");
+
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Client", b =>
@@ -165,6 +177,26 @@ namespace AnindaKapinda_MVC.Migrations
                     b.HasIndex("ClientID");
 
                     b.ToTable("CreditCards");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.District", b =>
+                {
+                    b.Property<int>("DistrictID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CityID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DistrictID");
+
+                    b.HasIndex("CityID");
+
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Employee", b =>
@@ -271,11 +303,9 @@ namespace AnindaKapinda_MVC.Migrations
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Cart", b =>
                 {
-                    b.HasOne("AnindaKapinda_MVC.Models.Client", "Client")
+                    b.HasOne("AnindaKapinda_MVC.Models.Client", null)
                         .WithOne("Cart")
                         .HasForeignKey("AnindaKapinda_MVC.Models.Cart", "ClientID");
-
-                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.CartProduct", b =>
@@ -296,6 +326,17 @@ namespace AnindaKapinda_MVC.Migrations
                         .HasForeignKey("ClientID");
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.District", b =>
+                {
+                    b.HasOne("AnindaKapinda_MVC.Models.City", "City")
+                        .WithMany("District")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Order", b =>
@@ -326,6 +367,11 @@ namespace AnindaKapinda_MVC.Migrations
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.City", b =>
+                {
+                    b.Navigation("District");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Client", b =>

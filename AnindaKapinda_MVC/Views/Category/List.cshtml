@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<AnindaKapinda_MVC.Models.Category>
 
+
+
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,6 +12,7 @@
 <p>
     <a asp-action="AddCategory" asp-controller="Administration">Create New</a>
 </p>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -28,7 +31,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <a asp-action="List" asp-controller="Product" asp-route-id="@item.CategoryID">List</a>
+                    <a asp-action="ListbyCategory" asp-controller="Product" asp-route-id="@item.CategoryID">List</a>
                 </td>
                 <td>
                     <a asp-action="EditCategory" asp-controller="Administration" asp-route-id="@item.CategoryID">Edit</a> |

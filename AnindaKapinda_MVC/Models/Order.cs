@@ -8,9 +8,10 @@ namespace AnindaKapinda_MVC.Models
     public class Order
     {
         public int OrderID { get; set; }
-        public string Products { get; set; }
         public Enumerations.OrderStatus OrderStatus { get; set; }
         public Enumerations.DeliveryStatus DeliveryStatus { get; set; }
-        public Employee Employee { get; set; }
+        public string Courier { get; set; }
+        
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

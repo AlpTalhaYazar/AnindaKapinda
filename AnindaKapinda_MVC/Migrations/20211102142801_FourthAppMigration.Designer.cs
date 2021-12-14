@@ -4,14 +4,16 @@ using AnindaKapinda_MVC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnindaKapinda_MVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211102142801_FourthAppMigration")]
+    partial class FourthAppMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,6 +72,9 @@ namespace AnindaKapinda_MVC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<int>("CartID")
                         .HasColumnType("int");
@@ -235,38 +240,23 @@ namespace AnindaKapinda_MVC.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Courier")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("DeliveryStatus")
                         .HasColumnType("int");
 
+                    b.Property<string>("EmployeeID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderID");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.OrderProduct", b =>
-                {
-                    b.Property<int>("OrderProductID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("OrderID")
                         .HasColumnType("int");
 
                     b.Property<string>("Products")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderProductID");
+                    b.HasKey("OrderID");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("EmployeeID");
 
-                    b.ToTable("OrderProducts");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Product", b =>
@@ -316,9 +306,11 @@ namespace AnindaKapinda_MVC.Migrations
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Cart", b =>
                 {
-                    b.HasOne("AnindaKapinda_MVC.Models.Client", null)
+                    b.HasOne("AnindaKapinda_MVC.Models.Client", "Client")
                         .WithOne("Cart")
                         .HasForeignKey("AnindaKapinda_MVC.Models.Cart", "ClientID");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.CartProduct", b =>
@@ -352,15 +344,13 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.OrderProduct", b =>
+            modelBuilder.Entity("AnindaKapinda_MVC.Models.Order", b =>
                 {
-                    b.HasOne("AnindaKapinda_MVC.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("AnindaKapinda_MVC.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeID");
 
-                    b.Navigation("Order");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("AnindaKapinda_MVC.Models.Product", b =>
@@ -396,11 +386,6 @@ namespace AnindaKapinda_MVC.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("CreditCards");
-                });
-
-            modelBuilder.Entity("AnindaKapinda_MVC.Models.Order", b =>
-                {
-                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }

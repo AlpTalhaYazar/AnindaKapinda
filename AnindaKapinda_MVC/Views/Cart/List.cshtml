@@ -1,0 +1,48 @@
+﻿@model IEnumerable<AnindaKapinda_MVC.Models.Cart>
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List</h1>
+
+<p>
+    <a asp-action="List2" asp-controller="Product">Continue Shopping</a>
+</p>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                Product Names
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            @foreach (var x in item.CartProducts)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => x.Product)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => x.Price)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td>
+                    <b>Total : </b> @item.CartProducts.Sum(x => x.Price) ₺
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Order" asp-controller="Client" class="btn btn-primary">Order your products</a>

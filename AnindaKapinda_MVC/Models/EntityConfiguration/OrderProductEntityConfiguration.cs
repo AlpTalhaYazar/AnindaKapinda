@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Models.EntityConfiguration
 {
-    public class ClientEntityConfiguration : IEntityTypeConfiguration<Client>
+    public class OrderProductEntityConfiguration : IEntityTypeConfiguration<OrderProduct>
     {
-        public void Configure(EntityTypeBuilder<Client> builder)
+        public void Configure(EntityTypeBuilder<OrderProduct> builder)
         {
-            builder.Property(x => x.ClientID).ValueGeneratedNever();
-            builder.Ignore(x => x.PasswordConfirmation);
+            builder.HasOne(x => x.Order).WithMany(x => x.OrderProducts).HasForeignKey(x=>x.OrderID);
         }
     }
 }

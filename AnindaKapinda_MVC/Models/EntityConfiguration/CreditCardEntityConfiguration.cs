@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace AnindaKapinda_MVC.Models.EntityConfiguration
 {
-    public class ClientEntityConfiguration : IEntityTypeConfiguration<Client>
+    public class CreditCardEntityConfiguration : IEntityTypeConfiguration<CreditCard>
     {
-        public void Configure(EntityTypeBuilder<Client> builder)
+        public void Configure(EntityTypeBuilder<CreditCard> builder)
         {
-            builder.Property(x => x.ClientID).ValueGeneratedNever();
-            builder.Ignore(x => x.PasswordConfirmation);
+            builder.HasOne(x => x.Client).WithMany(x => x.CreditCards).HasForeignKey(x => x.ClientID);
         }
     }
 }

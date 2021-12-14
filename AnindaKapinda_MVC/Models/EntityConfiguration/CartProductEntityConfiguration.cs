@@ -11,7 +11,7 @@ namespace AnindaKapinda_MVC.Models.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<CartProduct> builder)
         {
-            builder.HasOne(x => x.Cart).WithMany(x => x.CartProducts);
+            builder.HasOne(x => x.Cart).WithMany(x => x.CartProducts).HasForeignKey(x=>x.CartID);
         }
     }
 }
